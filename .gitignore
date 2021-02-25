@@ -1,6 +1,5 @@
 # Ignore all hidden directory except for .gitignore and .dockerignore
 .*
-!/.vscode
 !/.gitignore
 !/.github
 !/.dockerignore
