@@ -1,7 +1,5 @@
 # Java Maven Service Quickstart
 
-## Quickstart Calculator Service
-
 This quickstart boilerplate repository has a simple calculator web service implemented that caches the results of its computations, with endpoints in a format similar to the following:
 
 - /add/{a}/{b}/{c}

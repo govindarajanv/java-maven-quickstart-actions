@@ -64,7 +64,7 @@ jobs:
     - name: Test Image
       run: |
         VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" pom.xml)
-        docker-compose build --build-arg version=$VERSION java-maven-quickstart-service
+        docker-compose build --build-arg version=$VERSION java-maven-service
         docker-compose up -d
         docker ps
         sleep 60
