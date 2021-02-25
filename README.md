@@ -6,10 +6,12 @@
 
 This quickstart boilerplate repository has a simple calculator web service implemented that caches the results of its computations, with endpoints in a format similar to the following:
 
+
 - /addition/{a}/{b}/{c}
 - /subtraction/{a}/{b}/{c}
 - /multiplication/{a}/{b}/{c}
 - /division/{a}/{b}
+
 
 For the operations of addition, subtraction, and multiplication, the calculator endpoints should support an input of up to three numbers in the same call.
 
