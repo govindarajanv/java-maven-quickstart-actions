@@ -15,6 +15,8 @@ For the operations of addition, subtraction, and multiplication, the calculator 
 
 Each endpoint should support the GET method, and it should return the result in JSON format. If there is more than one call for the same operation on the same numbers, then the result should be returned from the cache rather than being recomputed.
 
-## References
-
+## Links
 [Static Site for Documentation](https://govindarajanv.github.io/java-maven-quickstart-actions/)
+
+## References
+- ltenconi/calculator-api
