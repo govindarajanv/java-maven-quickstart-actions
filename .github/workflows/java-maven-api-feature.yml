@@ -4,11 +4,7 @@
 name: Java Service with Maven
 on:
   push:
-    branches-ignore:
-      - 'master'
-      - 'release*'
-      - 'develop*'
-      - 'quick-poc*'
+    branches: [ feature-* ]
   pull_request:
     branches: [ develop ]
 jobs:
