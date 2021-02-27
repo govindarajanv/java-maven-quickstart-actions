@@ -49,7 +49,8 @@ jobs:
         java-version: 1.11
     - name: Maven Cobertura 
       run: |
-        mvn jacoco:report
+        mvn -B clean verify
+        #mvn jacoco:report
         curl -s https://codecov.io/bash|bash
   validate:
     name: Build and Test Image    
