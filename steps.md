@@ -31,3 +31,4 @@ fi
 docker push $IMAGE:$VERSION
 docker tag $ID $IMAGE:latest
 docker push $IMAGE:latest
+
