@@ -1,12 +1,28 @@
-# Java Maven Service Quickstart
+This is the website of [The Lounge](https://thelounge.chat/).
 
-This quickstart boilerplate repository has a simple calculator web service implemented that caches the results of its computations, with endpoints in a format similar to the following:
+## What is The Lounge?
 
-- /addition/{a}/{b}/{c}
-- /subtraction/{a}/{b}/{c}
-- /multiplication/{a}/{b}/{c}
-- /division/{a}/{b}
+The Lounge is a web IRC client. More information can be found at
+https://github.com/thelounge/thelounge.
 
-For the operations of addition, subtraction, and multiplication, the calculator endpoints should support an input of up to three numbers in the same call.
+## Development
 
-Each endpoint should support the GET method, and it should return the result in JSON format. If there is more than one call for the same operation on the same numbers, then the result should be returned from the cache rather than being recomputed. 
+This website is built using [Jekyll](https://jekyllrb.com/). After cloning this
+repository, install the dependencies with:
+
+```
+gem install bundler
+bundle install
+```
+
+To build and serve this website locally, run:
+
+```
+jekyll serve
+```
+
+## License
+
+Available under [the MIT license](LICENSE).
+
+We use [Font Awesome](https://fontawesome.com/) free icons which are licensed under [CC BY 4.0](https://fontawesome.com/license/free).
