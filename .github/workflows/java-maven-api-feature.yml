@@ -52,6 +52,8 @@ jobs:
         mvn -B clean verify
         #mvn jacoco:report
         curl -s https://codecov.io/bash|bash
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   validate:
     name: Build and Test Image    
     runs-on: ubuntu-latest
