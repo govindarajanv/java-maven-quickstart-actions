@@ -47,7 +47,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.11
-    - name: Maven Cobertura 
+    - name: Code Coverage using jacoco
       run: |
         mvn -B clean verify
         #mvn jacoco:report
