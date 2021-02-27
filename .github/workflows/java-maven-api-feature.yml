@@ -38,6 +38,22 @@ jobs:
         java-version: 1.11
     - name: Maven Verify
       run: mvn -B clean verify
+  coverage:
+    name: Code Coverage
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.11
+    - name: Code Coverage using jacoco
+      run: |
+        mvn -B clean verify
+        #mvn jacoco:report
+        curl -s https://codecov.io/bash|bash
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   validate:
     name: Build and Test Image    
     runs-on: ubuntu-latest
