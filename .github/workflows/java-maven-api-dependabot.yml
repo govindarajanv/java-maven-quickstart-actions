@@ -17,4 +17,3 @@ jobs:
     # Run the secrets finder
     - name: secrets finder
       run: echo "placeholder for dependency scan"
- 
