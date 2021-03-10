@@ -44,7 +44,6 @@ jobs:
           retention-days: 5
   close:
     name: Close Issue
-    needs: [deploy]
     runs-on: ubuntu-latest
     steps:
       - name: View context attributes
