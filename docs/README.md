@@ -2,7 +2,7 @@
 
 This quickstart boilerplate repository has a simple calculator web service implemented that caches the results of its computations, with endpoints in a format similar to the followingggg:
 
-- /addition/{a}/{b}/{c}
+- /addition/{a}/{b}/{c}/{d}
 - /subtraction/{a}/{b}/{c}
 - /multiplication/{a}/{b}/{c}
 - /division/{a}/{b}
