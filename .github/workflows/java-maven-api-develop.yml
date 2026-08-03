@@ -69,8 +69,9 @@ jobs:
           cache: 'maven'
       - name: API Contract Testing
         run: |
+          sudo apt-get update && sudo apt-get install -y libxml2-utils
           mvn clean install
-          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" pom.xml)
           java -jar target/java-maven-quickstart-actions-$VERSION.jar &
           PID=$!
           sleep 20
@@ -100,10 +101,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Dependency Review
         uses: actions/dependency-review-action@v5
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          base-ref: ${{ github.base_ref || github.event.before }}
+          head-ref: ${{ github.head_ref || github.sha }}
 
   container-scan:
     name: Container Scan
@@ -112,7 +117,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set image version
-        run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+        run: |
+          sudo apt-get update && sudo apt-get install -y libxml2-utils
+          VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" pom.xml)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
       - name: Build Docker image
         run: docker build -t java-maven-quickstart-service:${VERSION} .
       - name: Scan Docker image
@@ -126,11 +134,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
           cache: 'maven'
       - name: SonarCloud Scan
         run: mvn -B clean verify -Psonar -Dsonar.login=$SONAR_TOKEN
@@ -159,7 +167,8 @@ jobs:
           mvn clean deploy
       - name: Build Container Image
         run: |
-          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          sudo apt-get update && sudo apt-get install -y libxml2-utils
+          VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" pom.xml)
           docker build -t govindarajanv/java-maven-quickstart-service:$VERSION .
           docker build -t govindarajanv/java-maven-quickstart-service:latest .
           docker images
@@ -180,7 +189,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: Publish the image
         run: |
-          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          sudo apt-get update && sudo apt-get install -y libxml2-utils
+          VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" pom.xml)
           docker push govindarajanv/java-maven-quickstart-service:$VERSION
           docker push govindarajanv/java-maven-quickstart-service:latest
       - name: Share artifacts
@@ -218,7 +228,8 @@ jobs:
           path: target/
       - name: Build, Push and Deploy to Heroku
         run: |
-          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          sudo apt-get update && sudo apt-get install -y libxml2-utils
+          VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" pom.xml)
           docker login --username=$(heroku whoami) --password=$(heroku auth:token) registry.heroku.com
           docker build -t registry.heroku.com/java-maven-quickstart-service/web:$VERSION .
           docker build -t registry.heroku.com/java-maven-quickstart-service/web:latest .
