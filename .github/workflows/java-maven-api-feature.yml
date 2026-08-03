@@ -82,11 +82,11 @@ jobs:
           docker images
       - name: Test Image
         run: |
-          docker-compose up -d
+          docker compose up -d
           docker ps
           sleep 60
           docker ps
           result=$(docker inspect --format='{{json .State.Health}}' calculator | jq ."Status")
           if [ "$result" != "\"healthy\"" ]; then exit 1; fi
       - name: Shut down the service
-        run: docker-compose down
+        run: docker compose down
