@@ -1,8 +1,10 @@
-# Ignore all hidden directory except for .gitignore and .dockerignore
+# Ignore all hidden directory except for .gitignore, .dockerignore, and devcontainer config
 .*
 !/.gitignore
 !/.github
 !/.dockerignore
+!/.devcontainer/
+!/.devcontainer/devcontainer.json
 
 # Eclipse
 .classpath
