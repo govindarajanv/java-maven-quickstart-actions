@@ -3,11 +3,9 @@ version: "3.0"
 services:
   java-maven-service:
     container_name: calculator
-    build: 
+    build:
       context: ./
       dockerfile: Dockerfile
-      args:
-        value: 1.0.1-SNAPSHOT
     ports:
       - 8080:8080
     healthcheck:
