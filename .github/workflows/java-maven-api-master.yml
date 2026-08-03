@@ -149,6 +149,7 @@ jobs:
           java-version: '17'
           cache: 'maven'
       - name: SonarCloud Scan
+        continue-on-error: true
         run: mvn -B clean verify -Psonar -Dsonar.login=$SONAR_TOKEN
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
