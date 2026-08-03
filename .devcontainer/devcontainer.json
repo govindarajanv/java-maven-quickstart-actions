@@ -1,0 +1,14 @@
+{
+  "name": "java-maven-quickstart-actions",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "ms-java.java",
+        "kilocode.kilo-code",
+        "vscjava.vscode-java-pack"
+      ]
+    }
+  }
+}
