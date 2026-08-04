@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.10.RELEASE</version>
+		<version>3.4.5</version>
 	</parent>
 	<dependencies>
 		<dependency>
@@ -27,18 +27,18 @@
 		</dependency>
 	</dependencies>
 	<properties>
-		<java.version>11</java.version>
-		  <sonar.projectKey>govindarajanv_java-maven-quickstart-actions</sonar.projectKey>
-		  <sonar.organization>govindarajanv</sonar.organization>
-		  <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<java.version>17</java.version>
+		<sonar.projectKey>govindarajanv_java-maven-quickstart-actions</sonar.projectKey>
+		<sonar.organization>govindarajanv</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<distributionManagement>
-    		<repository>
-      			<id>github</id>
-      				<name>GitHub Packages</name>
-				<url>https://maven.pkg.github.com/govindarajanv/java-maven-quickstart-actions</url>
-    		</repository>
-  	</distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub Packages</name>
+			<url>https://maven.pkg.github.com/govindarajanv/java-maven-quickstart-actions</url>
+		</repository>
+	</distributionManagement>
 	<build>
 		<plugins>
 			<plugin>
@@ -46,31 +46,12 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-		    	<groupId>org.jacoco</groupId>
-		    	<artifactId>jacoco-maven-plugin</artifactId>
-			<version>0.8.5</version>
-			<executions>
-		      		<execution>
-				<id>prepare-agent</id>
-				<goals>
-			  		<goal>prepare-agent</goal>
-				</goals>
-		      		</execution>
-		      		<execution>
-				<id>report</id>
-			  	<phase>prepare-package</phase>
-			  	<goals>
-			    		<goal>report</goal>
-				</goals>
-		      		</execution>
-		    	</executions>
-		  	</plugin>
-			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.6</version>
+				<version>0.8.12</version>
 				<executions>
 					<execution>
+						<id>prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
@@ -87,7 +68,7 @@
 		</plugins>
 	</build>
 	<profiles>
-	<profile>
+		<profile>
 			<id>sonar</id>
 			<properties>
 				<sonar.sources>.</sonar.sources>
@@ -105,7 +86,7 @@
 					<plugin>
 						<groupId>org.sonarsource.scanner.maven</groupId>
 						<artifactId>sonar-maven-plugin</artifactId>
-						<version>3.7.0.1746</version>
+						<version>4.0.0.3116</version>
 						<executions>
 							<execution>
 								<phase>verify</phase>

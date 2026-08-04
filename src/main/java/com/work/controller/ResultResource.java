@@ -1,8 +1,8 @@
 package com.work.controller;
 
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
-public class ResultResource extends ResourceSupport {
+public class ResultResource extends RepresentationModel<ResultResource> {
 
 	private Integer result;
 

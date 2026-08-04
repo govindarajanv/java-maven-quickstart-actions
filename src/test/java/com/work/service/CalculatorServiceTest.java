@@ -1,78 +1,74 @@
 package com.work.service;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.work.service.CalculatorService;
 import com.work.service.exception.DivisionByZeroException;
 import com.work.service.exception.WrongNumberOfArgumentsException;
 
-public class CalculatorServiceTest {
+class CalculatorServiceTest {
 
 	private CalculatorService calculatorService = new CalculatorService();
 
 	@Test
-	public void testCreation() {
+	void testCreation() {
 		assertNotNull(calculatorService);
 	}
 
-	@Test(expected = WrongNumberOfArgumentsException.class)
-	public void testAddWithNoParams() {
-		calculatorService.add();
-	}
-
-	@Test(expected = WrongNumberOfArgumentsException.class)
-	public void testAddOneParam() {
-		calculatorService.add(1);
+	@Test
+	void testAddWithNoParams() {
+		assertThrows(WrongNumberOfArgumentsException.class, () -> calculatorService.add());
 	}
 
 	@Test
-	public void testAdd() {
-		Integer result = calculatorService.add(1, 4);
-		assertEquals(Integer.valueOf(5), result);
-	}
-
-	@Test(expected = WrongNumberOfArgumentsException.class)
-	public void testSubtractWithNoParams() {
-		calculatorService.subtract();
-	}
-
-	@Test(expected = WrongNumberOfArgumentsException.class)
-	public void testSubtractOneParam() {
-		calculatorService.subtract(5);
+	void testAddOneParam() {
+		assertThrows(WrongNumberOfArgumentsException.class, () -> calculatorService.add(1));
 	}
 
 	@Test
-	public void testSubtract() {
-		Integer result = calculatorService.subtract(1, 4);
-		assertEquals(Integer.valueOf(-3), result);
-	}
-
-	@Test(expected = WrongNumberOfArgumentsException.class)
-	public void testMultiplyWithNoParams() {
-		calculatorService.multiply();
-	}
-
-	@Test(expected = WrongNumberOfArgumentsException.class)
-	public void testMultiplyOneParam() {
-		calculatorService.multiply(1);
+	void testAdd() {
+		assertEquals(Integer.valueOf(5), calculatorService.add(1, 4));
 	}
 
 	@Test
-	public void testMultiply() {
-		Integer result = calculatorService.multiply(1, 4);
-		assertEquals(Integer.valueOf(4), result);
+	void testSubtractWithNoParams() {
+		assertThrows(WrongNumberOfArgumentsException.class, () -> calculatorService.subtract());
 	}
 
 	@Test
-	public void testDivide() {
-		Integer result = calculatorService.divide(12,2);
-		assertEquals(Integer.valueOf(6), result);
+	void testSubtractOneParam() {
+		assertThrows(WrongNumberOfArgumentsException.class, () -> calculatorService.subtract(5));
 	}
 
-	@Test(expected = DivisionByZeroException.class)
-	public void testDivideByZero() {
-		calculatorService.divide(12, 0);
+	@Test
+	void testSubtract() {
+		assertEquals(Integer.valueOf(-3), calculatorService.subtract(1, 4));
+	}
+
+	@Test
+	void testMultiplyWithNoParams() {
+		assertThrows(WrongNumberOfArgumentsException.class, () -> calculatorService.multiply());
+	}
+
+	@Test
+	void testMultiplyOneParam() {
+		assertThrows(WrongNumberOfArgumentsException.class, () -> calculatorService.multiply(1));
+	}
+
+	@Test
+	void testMultiply() {
+		assertEquals(Integer.valueOf(4), calculatorService.multiply(1, 4));
+	}
+
+	@Test
+	void testDivide() {
+		assertEquals(Integer.valueOf(6), calculatorService.divide(12, 2));
+	}
+
+	@Test
+	void testDivideByZero() {
+		assertThrows(DivisionByZeroException.class, () -> calculatorService.divide(12, 0));
 	}
 }

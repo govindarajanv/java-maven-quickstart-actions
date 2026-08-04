@@ -1,11 +1,12 @@
-FROM maven:3.9.6-eclipse-temurin-11 AS build
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /build
 COPY pom.xml .
 COPY src ./src
 RUN mvn -B package -DskipTests
 
-FROM adoptopenjdk/openjdk11
+FROM eclipse-temurin:17-jre-jammy
 WORKDIR /usr/app
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 COPY --from=build /build/target/*.jar app.jar
 ENV PORT=8080
 CMD ["java", "-jar", "app.jar"]

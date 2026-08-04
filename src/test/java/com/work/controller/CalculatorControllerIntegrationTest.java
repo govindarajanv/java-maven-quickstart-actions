@@ -1,26 +1,19 @@
 package com.work.controller;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.work.controller.ResultResource;
 
-import static org.hamcrest.CoreMatchers.*;
-
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class CalculatorControllerIntegrationTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class CalculatorControllerIntegrationTest {
 
 	@LocalServerPort
 	private int port;
@@ -29,58 +22,59 @@ public class CalculatorControllerIntegrationTest {
 	private TestRestTemplate restTemplate;
 
 	@Test
-	public void testGetAdditionTwoArguments() throws Exception {
+	void testGetAdditionTwoArguments() {
 		ResultResource resultResource = this.restTemplate.getForObject(getPath() + "/addition/2/3",
 				ResultResource.class);
-		assertThat(resultResource.getResult(), equalTo(5));
+		assertEquals(5, resultResource.getResult());
 	}
 
 	@Test
-	public void testGetAdditionThreeArguments() throws Exception {
+	void testGetAdditionThreeArguments() {
 		ResultResource resultResource = this.restTemplate.getForObject(getPath() + "/addition/2/3/1",
 				ResultResource.class);
-		assertThat(resultResource.getResult(), equalTo(6));
+		assertEquals(6, resultResource.getResult());
 	}
 
 	@Test
-	public void testGetSubtractionTwoArguments() throws Exception {
+	void testGetSubtractionTwoArguments() {
 		ResultResource resultResource = this.restTemplate.getForObject(getPath() + "/subtraction/2/3",
 				ResultResource.class);
-		assertThat(resultResource.getResult(), equalTo(-1));
+		assertEquals(-1, resultResource.getResult());
 	}
 
 	@Test
-	public void testGetSubtractionThreeArguments() throws Exception {
+	void testGetSubtractionThreeArguments() {
 		ResultResource resultResource = this.restTemplate.getForObject(getPath() + "/subtraction/2/3/1",
 				ResultResource.class);
-		assertThat(resultResource.getResult(), equalTo(-2));
+		assertEquals(-2, resultResource.getResult());
 	}
 
 	@Test
-	public void testGetMultiplicationTwoArguments() throws Exception {
+	void testGetMultiplicationTwoArguments() {
 		ResultResource resultResource = this.restTemplate.getForObject(getPath() + "/multiplication/2/3",
 				ResultResource.class);
-		assertThat(resultResource.getResult(), equalTo(6));
+		assertEquals(6, resultResource.getResult());
 	}
 
 	@Test
-	public void testGetMultiplicationThreeArguments() throws Exception {
+	void testGetMultiplicationThreeArguments() {
 		ResultResource resultResource = this.restTemplate.getForObject(getPath() + "/multiplication/2/3/2",
 				ResultResource.class);
-		assertThat(resultResource.getResult(), equalTo(12));
+		assertEquals(12, resultResource.getResult());
 	}
 
 	@Test
-	public void testGetDivision() throws Exception {
+	void testGetDivision() {
 		ResultResource resultResource = this.restTemplate.getForObject(getPath() + "/division/6/3",
 				ResultResource.class);
-		assertThat(resultResource.getResult(), equalTo(2));
+		assertEquals(2, resultResource.getResult());
 	}
 
 	@Test
-	public void testGetDivisionByZeroNotFound() throws Exception {
-		ResponseEntity<String> response = restTemplate.getForEntity(getPath() + "/division/2/0", String.class);
-		assertThat(response.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
+	void testGetDivisionByZero() {
+		ResponseEntity<ErrorResponse> response = restTemplate.getForEntity(
+				getPath() + "/division/2/0", ErrorResponse.class);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 	}
 
 	private String getPath() {

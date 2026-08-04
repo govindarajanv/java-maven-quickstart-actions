@@ -1,6 +1,6 @@
-|  Github Actions | SonarCloud | Hits | License | Service Health | Azure DevOps |
-|  :-------------: | :------: | :------------: | :------: | :-------: | :-------: |
-| [![Java CI with Maven](https://github.com/govindarajanv/java-maven-quickstart-actions/actions/workflows/java-maven-api-master.yml/badge.svg)](https://github.com/govindarajanv/java-maven-quickstart-actions/actions/workflows/java-maven-api-master.yml) | [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=govindarajanv_java-maven-quickstart-actions&metric=alert_status)](https://sonarcloud.io/dashboard?id=govindarajanv_java-maven-quickstart-actions) | [![HitCount](http://hits.dwyl.com/govindarajanv/java-maven-quickstart-actions.svg)](http://hits.dwyl.com/govindarajanv/java-maven-quickstart-actions) | [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) | ![API](https://img.shields.io/website?url=https%3A%2F%2Fjava-maven-quickstart-service.herokuapp.com%2Faddition%2F1%2F2%2F3) | [![Java CI with Maven](https://github.com/govindarajanv/java-maven-quickstart-actions/actions/workflows/java-maven-api-master.yml/badge.svg)](https://github.com/govindarajanv/java-maven-quickstart-actions/actions/workflows/java-maven-api-master.yml) |
+|  Github Actions | SonarCloud | Hits | License |
+|  :-------------: | :------: | :------------: | :------: |
+| [![Java Service with Maven](https://github.com/govindarajanv/java-maven-quickstart-actions/actions/workflows/java-maven-api-develop.yml/badge.svg)](https://github.com/govindarajanv/java-maven-quickstart-actions/actions/workflows/java-maven-api-develop.yml) | [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=govindarajanv_java-maven-quickstart-actions&metric=alert_status)](https://sonarcloud.io/dashboard?id=govindarajanv_java-maven-quickstart-actions) | [![HitCount](http://hits.dwyl.com/govindarajanv/java-maven-quickstart-actions.svg)](http://hits.dwyl.com/govindarajanv/java-maven-quickstart-actions) | [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) |
 
 
 # Java Maven Quickstart Boiler Plate Repository
@@ -21,8 +21,7 @@ Each endpoint should support the GET method, and it should return the result in 
 - [Static Site for Documentation](https://govindarajanv.github.io/java-maven-quickstart-actions/)
 - [SonarCloud Dashboard](https://sonarcloud.io/dashboard?id=govindarajanv_java-maven-quickstart-actions)
 - [DockerHub](https://hub.docker.com/repository/docker/govindarajanv/java-maven-quickstart-service/tags?page=1&ordering=last_updated)
-- [Heroku Dashboard](https://dashboard.heroku.com/apps/java-maven-quickstart-service/activity)
-- [API](https://java-maven-quickstart-service.herokuapp.com/addition/1/2/3)
+- [API](http://localhost:8080/addition/1/2/3)
 - [CodeCov](https://app.codecov.io/gh/govindarajanv/java-maven-quickstart-actions/commits?page=1)
 - [Marketplace](https://github.com/marketplace/actions/govind-secret-finder)
 - [Pagerduty](https://govindarajanv.pagerduty.com/incidents)

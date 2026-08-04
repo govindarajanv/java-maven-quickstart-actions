@@ -2,9 +2,9 @@ name: Java Service with Maven
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, master, test ]
   pull_request:
-    branches: [ master ]
+    branches: [ develop, master ]
 
 jobs:
   build:
@@ -12,44 +12,59 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
           cache: 'maven'
       - name: Build with Maven
-        run: mvn -B compile --file pom.xml
+        run: mvn -B package -DskipTests
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: target/*.jar
 
   unit-test:
     name: Unit Test
-    needs: [build]
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
           cache: 'maven'
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: target/
       - name: Unit Test
-        run: mvn -B clean verify
+        run: mvn -B test
 
   coverage:
     name: Code Coverage
-    needs: [build]
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
           cache: 'maven'
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: target/
       - name: Generate coverage report
-        run: mvn -B clean verify
+        run: mvn -B test jacoco:report
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
@@ -57,20 +72,24 @@ jobs:
 
   contract-test:
     name: Contract Test
-    needs: [build]
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
           cache: 'maven'
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: target/
       - name: API Contract Testing
         run: |
           sudo apt-get update && sudo apt-get install -y libxml2-utils
-          mvn clean install
           VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" pom.xml)
           java -jar target/java-maven-quickstart-actions-$VERSION.jar &
           PID=$!
@@ -86,7 +105,7 @@ jobs:
 
   secret-scan:
     name: Secret Scan
-    needs: [build]
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -97,7 +116,7 @@ jobs:
 
   dependency-scan:
     name: Dependency Scan
-    needs: [build]
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -112,7 +131,7 @@ jobs:
 
   container-scan:
     name: Container Scan
-    needs: [build]
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -130,7 +149,7 @@ jobs:
 
   sonar:
     name: Static Code Analysis
-    needs: [build]
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -140,6 +159,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'maven'
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: target/
       - name: SonarCloud Scan
         continue-on-error: true
         run: mvn -B clean verify -Psonar -Dsonar.login=$SONAR_TOKEN
@@ -153,12 +177,17 @@ jobs:
     needs: [unit-test, contract-test, sonar, coverage, secret-scan, dependency-scan, container-scan]
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
           cache: 'maven'
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: target/
       - name: Deploy to Github Package Registry
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -200,59 +229,3 @@ jobs:
           name: my-artifact
           path: target/*
           retention-days: 5
-
-  integration-test:
-    name: API Integration Testing
-    runs-on: ubuntu-latest
-    needs: [publish]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK 11
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '11'
-          cache: 'maven'
-      - name: API Contract Testing
-        run: echo "Integration Testing is Stubbed"
-
-  deploy:
-    name: Deploy/Release to production
-    runs-on: ubuntu-latest
-    needs: [integration-test]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download a single artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: my-artifact
-          path: target/
-      - name: Build, Push and Deploy to Heroku
-        run: |
-          sudo apt-get update && sudo apt-get install -y libxml2-utils
-          VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" pom.xml)
-          docker login --username=$(heroku whoami) --password=$(heroku auth:token) registry.heroku.com
-          docker build -t registry.heroku.com/java-maven-quickstart-service/web:$VERSION .
-          docker build -t registry.heroku.com/java-maven-quickstart-service/web:latest .
-          docker push registry.heroku.com/java-maven-quickstart-service/web:latest
-          heroku container:login
-          app_version=$(heroku apps:info java-maven-quickstart-service -j | jq ."dynos[0].release.version")
-          echo "Current App version is $app_version"
-          heroku container:rm web -a java-maven-quickstart-service || true
-          heroku container:release web -a java-maven-quickstart-service
-          app_version=$(heroku apps:info java-maven-quickstart-service -j | jq ."dynos[0].release.version")
-          echo "Released App version is $app_version"
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
-          HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
-      - name: Post Deployment Check
-        run: |
-          sleep 60
-          result=$(curl -s https://java-maven-quickstart-service.herokuapp.com/addition/1/2/3 | jq .result)
-          if [ "$result" -eq 6 ]; then
-            echo "Application is successfully deployed in production"
-          else
-            echo "Prod deployment failed"
-            exit 1
-          fi
