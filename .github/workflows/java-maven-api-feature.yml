@@ -50,7 +50,7 @@ jobs:
         with:
           name: build-artifact
           path: target/
-      - name: Maven Verify
+      - name: Unit Test
         run: mvn -B test
 
   coverage:

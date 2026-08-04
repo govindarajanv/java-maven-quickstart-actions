@@ -5,15 +5,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
+
+import com.work.service.exception.DivisionByZeroException;
+import com.work.service.exception.WrongNumberOfArgumentsException;
 
 @ControllerAdvice
 @RestController
 public class GlobalErrorController {
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponse> handleAll(Exception ex, WebRequest request) {
-		ErrorResponse error = new ErrorResponse("Internal Server Error", "An unexpected error occurred");
-		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+	@ExceptionHandler({ WrongNumberOfArgumentsException.class, DivisionByZeroException.class })
+	public ResponseEntity<ErrorResponse> handleBadRequest(RuntimeException ex) {
+		ErrorResponse error = new ErrorResponse("Bad Request", ex.getMessage());
+		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 }

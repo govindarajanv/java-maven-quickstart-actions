@@ -4,4 +4,7 @@ public class DivisionByZeroException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
+	public DivisionByZeroException() {
+		super("Division by zero is not allowed.");
+	}
 }
