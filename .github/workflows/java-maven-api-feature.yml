@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [ develop ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   secret_scan:
     name: Find secrets
@@ -26,7 +33,7 @@ jobs:
           java-version: '17'
           cache: 'maven'
       - name: Build with Maven
-        run: mvn -B package -DskipTests
+        run: mvn -B package -DskipTests -Pcode-quality
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -51,7 +58,7 @@ jobs:
           name: build-artifact
           path: target/
       - name: Unit Test
-        run: mvn -B test
+        run: mvn -B test -Pcode-quality
 
   coverage:
     name: Code Coverage
@@ -73,7 +80,7 @@ jobs:
       - name: Generate coverage report
         run: mvn -B test jacoco:report
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 

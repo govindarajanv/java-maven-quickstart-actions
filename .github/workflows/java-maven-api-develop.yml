@@ -6,6 +6,15 @@ on:
   pull_request:
     branches: [ develop, master ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
 jobs:
   build:
     name: Build
@@ -19,7 +28,7 @@ jobs:
           java-version: '17'
           cache: 'maven'
       - name: Build with Maven
-        run: mvn -B package -DskipTests
+        run: mvn -B package -DskipTests -Pcode-quality
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -44,7 +53,7 @@ jobs:
           name: build-artifact
           path: target/
       - name: Unit Test
-        run: mvn -B test
+        run: mvn -B test -Pcode-quality
 
   coverage:
     name: Code Coverage
@@ -64,9 +73,9 @@ jobs:
           name: build-artifact
           path: target/
       - name: Generate coverage report
-        run: mvn -B test jacoco:report
+        run: mvn -B test jacoco:report -Pcode-quality
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -118,6 +127,8 @@ jobs:
     name: Dependency Scan
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
         with:
@@ -143,9 +154,17 @@ jobs:
       - name: Build Docker image
         run: docker build -t java-maven-quickstart-service:${VERSION} .
       - name: Scan Docker image
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: aquasecurity/trivy-action@v0.28.0
         with:
           image-ref: java-maven-quickstart-service:${{ env.VERSION }}
+          format: table
+          output: trivy-results.txt
+      - name: Upload scan results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-results
+          path: trivy-results.txt
 
   sonar:
     name: Static Code Analysis
@@ -175,6 +194,9 @@ jobs:
     name: Publish
     runs-on: ubuntu-latest
     needs: [unit-test, contract-test, sonar, coverage, secret-scan, dependency-scan, container-scan]
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17

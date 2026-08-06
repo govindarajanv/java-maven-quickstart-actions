@@ -1,0 +1,16 @@
+# GitHub code owners
+* @govindarajanv
+
+# Java source code
+src/main/java/ @govindarajanv
+src/test/java/ @govindarajanv
+
+# Build configuration
+pom.xml @govindarajanv
+
+# CI/CD
+.github/ @govindarajanv
+
+# Docker
+Dockerfile @govindarajanv
+docker-compose.yml @govindarajanv

@@ -1,5 +1,9 @@
 {
   "name": "java-maven-quickstart-actions",
+  "image": "mcr.microsoft.com/devcontainers/java:21",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
   "customizations": {
     "vscode": {
       "extensions": [
@@ -7,8 +11,11 @@
         "GitHub.copilot-chat",
         "ms-java.java",
         "kilocode.kilo-code",
-        "vscjava.vscode-java-pack"
+        "vscjava.vscode-java-pack",
+        "redhat.java"
       ]
     }
-  }
+  },
+  "forwardPorts": [8080],
+  "postCreateCommand": "javac -version && mvn -version"
 }

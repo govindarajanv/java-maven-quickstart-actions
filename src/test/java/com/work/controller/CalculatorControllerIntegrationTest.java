@@ -21,6 +21,8 @@ class CalculatorControllerIntegrationTest {
 	@Autowired
 	private TestRestTemplate restTemplate;
 
+	// --- Addition ---
+
 	@Test
 	void testGetAdditionTwoArguments() {
 		ResultResource resultResource = this.restTemplate.getForObject(getPath() + "/addition/2/3",
@@ -36,6 +38,15 @@ class CalculatorControllerIntegrationTest {
 	}
 
 	@Test
+	void testGetAdditionNegativeNumbers() {
+		ResultResource resultResource = this.restTemplate.getForObject(getPath() + "/addition/-5/3",
+				ResultResource.class);
+		assertEquals(-2, resultResource.getResult());
+	}
+
+	// --- Subtraction ---
+
+	@Test
 	void testGetSubtractionTwoArguments() {
 		ResultResource resultResource = this.restTemplate.getForObject(getPath() + "/subtraction/2/3",
 				ResultResource.class);
@@ -48,6 +59,8 @@ class CalculatorControllerIntegrationTest {
 				ResultResource.class);
 		assertEquals(-2, resultResource.getResult());
 	}
+
+	// --- Multiplication ---
 
 	@Test
 	void testGetMultiplicationTwoArguments() {
@@ -64,6 +77,15 @@ class CalculatorControllerIntegrationTest {
 	}
 
 	@Test
+	void testGetMultiplicationWithZero() {
+		ResultResource resultResource = this.restTemplate.getForObject(getPath() + "/multiplication/0/5",
+				ResultResource.class);
+		assertEquals(0, resultResource.getResult());
+	}
+
+	// --- Division ---
+
+	@Test
 	void testGetDivision() {
 		ResultResource resultResource = this.restTemplate.getForObject(getPath() + "/division/6/3",
 				ResultResource.class);
@@ -75,6 +97,29 @@ class CalculatorControllerIntegrationTest {
 		ResponseEntity<ErrorResponse> response = restTemplate.getForEntity(
 				getPath() + "/division/2/0", ErrorResponse.class);
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+	}
+
+	// --- Error Handling ---
+
+	@Test
+	void testBadRequestOnNonIntegerPath() {
+		ResponseEntity<String> response = restTemplate.getForEntity(
+				getPath() + "/addition/abc/2", String.class);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+	}
+
+	@Test
+	void testNotFoundOnUnknownEndpoint() {
+		ResponseEntity<String> response = restTemplate.getForEntity(
+				getPath() + "/addition/999", String.class);
+		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+	}
+
+	@Test
+	void testActuatorHealthEndpoint() {
+		ResponseEntity<String> response = restTemplate.getForEntity(
+				getPath() + "/actuator/health", String.class);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
 	private String getPath() {

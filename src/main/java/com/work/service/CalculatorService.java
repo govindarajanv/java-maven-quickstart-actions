@@ -10,51 +10,36 @@ import com.work.service.exception.WrongNumberOfArgumentsException;
 
 /**
  * Performs basic math calculations on arrays of Integers.
- * Results will be cached.
- * 
- * @author Lucas
+ * Results are cached based on the operation and arguments.
  *
+ * @author Lucas
  */
 @Service
 public class CalculatorService {
 
 	@Cacheable("addition")
 	public Integer add(Integer... numbers) {
-
 		validate(numbers);
-
 		return Arrays.stream(numbers).mapToInt(Integer::intValue).sum();
 	}
 
 	@Cacheable("subtraction")
 	public Integer subtract(Integer... numbers) {
-
 		validate(numbers);
-
-		Integer result = numbers[0];
-
-		for (int i = 1; i < numbers.length; i++) {
-			result = result - numbers[i];
-		}
-
-		return result;
+		return Arrays.stream(numbers).mapToInt(Integer::intValue).reduce((a, b) -> a - b).orElse(0);
 	}
 
 	@Cacheable("multiplication")
 	public Integer multiply(Integer... numbers) {
-
 		validate(numbers);
-
 		return Arrays.stream(numbers).mapToInt(Integer::intValue).reduce(1, (a, b) -> a * b);
 	}
 
 	@Cacheable("division")
 	public Integer divide(Integer a, Integer b) {
-
-		if (0 == b) {
+		if (b == 0) {
 			throw new DivisionByZeroException();
 		}
-
 		return a / b;
 	}
 

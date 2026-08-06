@@ -26,9 +26,16 @@ spec:
       containers:
         - image: java-maven-service
           livenessProbe:
-            exec:
-              command:
-                - curl localhost:8080/addition/1/2/3
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            failureThreshold: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
             failureThreshold: 5
             periodSeconds: 10
             timeoutSeconds: 5
